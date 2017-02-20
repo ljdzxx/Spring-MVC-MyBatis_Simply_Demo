@@ -1,0 +1,13 @@
+# Windows:
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# project folder
+/.myeclipse/*
+/.settings/*
+/log/*
+/WebRoot/*
+/.classpath
+/.mymetadata
+.project
