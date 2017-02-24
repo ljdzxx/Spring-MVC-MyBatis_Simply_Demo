@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+  <!--
+      引入外部properties配置文件，后面内容则通过${属性名}来引用属性值
+        在使用实例化SqlSessionFactory时，还可以通过new SqlSessionFactoryBuilder.build(config.xml的InputStream实例, Properties实例)来设置属性值。
+    优先级从高到低是：
+        1. 通过build方法入参设置
+        2. 通过resource引入的属性
+        3. 通过property标签设置的属性
+    -->
+  <properties resource="mysql.properties"></properties>
+   
+   <!--强制指定MyBatis使用log4j作为日志日志框架，若不指定那么当部署到如Tomcat等应用容器时，会被容器设置为使用common-logging来记录日志-->
+    <settings>
+        <setting name="logImpl" value="LOG4J"/>
+    </settings>
+    
+   <!-- 配置mybatis运行环境 -->
+   <!-- 和spring整合后 environments配置将废除-->
+     <environments default="dev">
+			
+        <environment id="dev">
+
+        	<!--
+   　    　　 type属性用于指定事务管理器类型
+       　　    JDBC：使用JDBC的提交和回滚设置，依赖从数据源获取的连接来管理事务范围。
+       　　    MANAGED：让容器（如Spring）来管理事务的生命周期。默认情况会关闭连接，
+　　　　　　　　　　若不想关闭连接则需要如下配置：
+　　    　　　　   <transactionManager type="MANAGED">
+　　　　              <property name="closeConnection" value="false"/>
+　　              </transactionManager>
+            -->
+            <transactionManager type="JDBC" />
+            
+            <!-- mybatis提供了3种数据源类型，分别是：POOLED,UNPOOLED,JNDI -->
+            <!-- POOLED 表示支持JDBC数据源连接池 -->
+            <!-- UNPOOLED 表示不支持数据源连接池 -->
+            <!-- JNDI 表示支持外部数据源连接池 -->
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}" />
+                <property name="url" value="${jdbc.url}" />
+                <property name="username" value="${jdbc.username}" />
+                <property name="password" value="${jdbc.password}" />
+            </dataSource>
+        </environment>
+    </environments> 
+    
+    
+    <!--向MyBatis注册映射信息-->
+    <mappers>
+		<!-- 告知映射文件方式1，一个一个的配置
+		<mapper resource="com/baobaotao/mybatis/mapping/UserMapper.xml" />
+		-->
+		  
+		<!-- 告知映射文件方式2，自动扫描包内的Mapper接口与配置文件 -->
+		<package name="com/baobaotao/mybatis/mapping"/>
+    </mappers>
+</configuration>

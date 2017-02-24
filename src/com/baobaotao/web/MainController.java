@@ -8,32 +8,44 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.baobaotao.domain.User;
-import com.baobaotao.service.UserService;
+import com.baobaotao.service.impl.UserService_Mybatis;
 
 @Controller
 public class MainController {
 	@Autowired
-	private UserService userService;
+	private UserService_Mybatis userService;
 	
-	//负责处理index.html的请求
-	@RequestMapping(value="/index.html")
+	//负责处理login.html的请求
+	@RequestMapping(value="/login.html")
 	public String loginPage(){
 		return "login";
 	}
 	
 	//负责处理/loginCheck.html的请求
 	@RequestMapping(value="/loginCheck.html")
-	public ModelAndView loginCheck(HttpServletRequest request, LoginCommand loginCommand){
-		boolean isValidUser=userService.hasMatchUser(loginCommand.getUserName(), loginCommand.getPassword());
+	public ModelAndView loginCheck(HttpServletRequest request, User user) throws Exception{
+		//boolean isValidUser=userService.hasMatchUser(loginCommand.getUserName(), loginCommand.getPassword());
+		boolean isValidUser=userService.login(user.getUserName(),user.getPassword());
 		if(!isValidUser){
 			return new ModelAndView("login","error","用户名或密码错误。");
 		}else{
-			User user=userService.findUserByUserName(loginCommand.getUserName());
-			user.setLastIp(request.getLocalAddr());
-			user.setLastVisit(new Date());
-			userService.loginSuccess(user);
-			request.getSession().setAttribute("user", user);
-			return new ModelAndView("main");
+			User u=userService.findUserByUserName(user.getUserName());
+			//System.out.println("1.user:[credits:"+u.getCredits()+"]");
+			if(null!=u){
+				u.setLastIp(request.getLocalAddr());
+				u.setLastVisit(new Date());
+				userService.updateOnloginSuccess(u);
+				request.getSession().setAttribute("user", u);
+				//System.out.println("2.user:["+request.getSession().getAttribute("user").toString()+"]");
+				if(request.getSession().getAttribute("returnUri")==null || request.getSession().getAttribute("returnUri").equals("")){//登录前没有访问别的页面
+					return new ModelAndView("main");
+				}else{//返回登录前访问的页面
+					return new ModelAndView("redirect");
+				}
+			}else{
+				return new ModelAndView("login","error","数据库中没有找到该用户["+user.getUserName()+"]。");
+			}
+			
 		}
 	}
 }

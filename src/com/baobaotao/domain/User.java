@@ -16,6 +16,23 @@ public class User implements Serializable {
 	private String lastIp;
 	private Date lastVisit;
 	
+	public String toString(){
+		return "[userId:"+ userId +" ,userName:"+userName+" ,password:"+password+" ,credits:"+credits+" ,lastIp:"+lastIp+" ,lastVisit:"+lastVisit+"]";
+	}
+	
+	/**
+	   * 必须提供一个无参数的构造函数
+	   */
+	public User(){
+		super();
+	}
+	
+	public User(String userName, String password){
+		super();
+		this.userName=userName;
+		this.password=password;
+	}
+	
 	public int getUserId() {
 		return userId;
 	}
