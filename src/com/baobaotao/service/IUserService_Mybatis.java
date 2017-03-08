@@ -1,5 +1,8 @@
 package com.baobaotao.service;
 
+import java.util.List;
+
+import com.baobaotao.domain.LoginLog;
 import com.baobaotao.domain.User;
 
 public interface IUserService_Mybatis {
@@ -13,4 +16,7 @@ public interface IUserService_Mybatis {
 		
 		//登录成功后进行的操作
 		public boolean updateOnloginSuccess(User user) throws Exception;
+		
+		//列表登录日志
+		public List<LoginLog> listLoginLog() throws Exception;
 }

@@ -1,5 +1,7 @@
 package com.baobaotao.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -16,6 +18,11 @@ public class UserService_Mybatis implements IUserService_Mybatis {
 	private UserMapper um;
 	@Resource
 	private LoginLogMapper llm;
+	
+	@Override
+	public List<LoginLog> listLoginLog() throws Exception{
+		return llm.listLoginLog();
+	}
 
 	@Override
 	public boolean login(String userName, String password) throws Exception {

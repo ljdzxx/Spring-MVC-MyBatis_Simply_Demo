@@ -1,12 +1,15 @@
 package com.baobaotao.web;
 
 import java.util.Date;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.baobaotao.domain.LoginLog;
 import com.baobaotao.domain.User;
 import com.baobaotao.service.impl.UserService_Mybatis;
 
@@ -20,6 +23,22 @@ public class MainController {
 	public String loginPage(){
 		return "login";
 	}
+	
+	//负责处理main.html的请求
+	@RequestMapping(value="/main.html")
+	public String mainPage(){
+		return "main";
+	}
+	
+	//登录日志显示
+	@RequestMapping(value="/listLoginLog.html")
+	public ModelAndView listLoginLog() throws Exception{
+		List<LoginLog> list=userService.listLoginLog();
+		
+		return new ModelAndView("loginList","list",list);
+	}
+	
+	
 	
 	//负责处理/loginCheck.html的请求
 	@RequestMapping(value="/loginCheck.html")

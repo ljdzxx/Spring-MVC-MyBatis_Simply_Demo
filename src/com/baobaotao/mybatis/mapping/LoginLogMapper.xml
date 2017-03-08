@@ -19,4 +19,8 @@
     	insert into t_login_log (user_id,ip,login_datetime) values (#{userId},#{ip},#{loginDate})
     </insert>
     
+    <select id="listLoginLog" resultMap="loginLogMap">
+     	select * from t_login_log
+    </select>
+    
 </mapper>
